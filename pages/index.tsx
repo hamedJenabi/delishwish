@@ -2,6 +2,10 @@ import Head from 'next/head'
 import styled from 'styled-components';
 import { MainLayout } from '../components/MainLayout';
 import { RecipeList, queryEnum } from '../components/RecipeList';
+import nextCookies from 'next-cookies';
+import { isSessionTokenValid } from '../utils/auth';
+import {getSessionByToken} from '../utils/database';
+import { GetServerSidePropsContext } from 'next';
 
 const StyledHeader = styled.h1`
   font-size: 2em;
@@ -25,4 +29,26 @@ export default function Home() {
       </MainLayout>
     </>
   )
+}
+
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const { session: token } = nextCookies(context);
+
+  const redirectDestination = context?.query?.returnTo ?? '/';
+
+  if (await isSessionTokenValid(token)) {
+    return {
+      redirect: {
+        destination: redirectDestination,
+        permanent: false,
+      },
+    };
+  }
+  console.log('token', token);
+  const user = await getSessionByToken(token);
+// console.log('user', user);
+  return {
+    props: { loggedIn: false, redirectDestination: redirectDestination },
+  };
 }

@@ -56,12 +56,12 @@ export async function insertUser(user: User) {
   return users.map((u) => camelcaseKeys(u))[0];
 }
 
-export async function registerUser(username: string, passwordHash: string) {
+export async function registerUser(firstname: string, lastname: string, username: string, passwordHash: string) {
   const users = await sql<User[]>`
     INSERT INTO users
-      (username, password_hash)
+      (first_name, last_name, username, password_hash)
     VALUES
-      (${username}, ${passwordHash})
+      (${firstname}, ${lastname}, ${username}, ${passwordHash})
     RETURNING *;
   `;
 

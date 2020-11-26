@@ -11,7 +11,7 @@ export default async function handler(
 ) {
   // Extract the username, password and token from the request
   // body (this process is called "destructuring")
-  const { username, password, token } = request.body;
+  const { firstname, lastname, username, password, token } = request.body;
 
   const secret = process.env.CSRF_TOKEN_SECRET;
 
@@ -40,7 +40,7 @@ export default async function handler(
 
   try {
     const passwordHash = await argon2.hash(password);
-    await registerUser(username, passwordHash);
+    await registerUser(firstname, lastname, username, passwordHash);
   } catch (err) {
     // If hashing the password or registering the user fails
     // for any reason, then return an error status

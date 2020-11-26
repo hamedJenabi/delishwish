@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { MainLayout } from '../components/MainLayout';
 
 export default function Register(props: { token: string }) {
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -19,6 +21,14 @@ export default function Register(props: { token: string }) {
       <h1>Register</h1>
 
       <form
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent:'center',
+        alignSelf: 'center',
+        alignItems: "center",
+        margin: "50px 0",
+      }}
         onSubmit={async (e) => {
           // Prevent the default browser behavior of forms
           e.preventDefault();
@@ -31,6 +41,8 @@ export default function Register(props: { token: string }) {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+              firstname: firstname,
+              lastname: lastname,
               username: username,
               password: password,
               token: props.token,
@@ -54,6 +66,16 @@ export default function Register(props: { token: string }) {
           }
         }}
       >
+        <input
+          data-cy="register-username-input"
+          value={firstname}
+          onChange={(e) => setFirstname(e.currentTarget.value)}
+        />
+        <input
+          data-cy="register-username-input"
+          value={lastname}
+          onChange={(e) => setLastname(e.currentTarget.value)}
+        />
         <input
           data-cy="register-username-input"
           value={username}
